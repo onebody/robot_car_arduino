@@ -94,60 +94,75 @@ void Blue_Str()
 //大右转
 void Da_right()
 {
-  fx_csb(100);//舵机归正位
-  fx_csb(40);//舵机转右40°
+  Serial.println("car Da_right <<<<<" ) ;
+  Serial.println();
+  fx_csb(60);//舵机归正位
+  fx_csb(0);//舵机转右40°
   ESC_MGo();
-  delay(100);
+  delay(1000);
+  fx_csb(60);//舵机归正位
 }
 
 
 //大左转
 void Da_left()
 {
-  fx_csb(100);//舵机归正位
+  Serial.println("car Da_left <<<<<" ) ;
+  Serial.println();
+  fx_csb(60);//舵机归正位
   fx_csb(160);//舵机转左60°
   ESC_MGo();
-  delay(100);
+  delay(1000);
+  fx_csb(60);//舵机归正位
 }
 
 //左转弯
 void left()
 {
-  fx_csb(100);//舵机归正位
+  Serial.println("car left <<<<<" ) ;
+  Serial.println();
+  fx_csb(60);//舵机归正位
   fx_csb(160);//舵机转左160°
   ESC_MGo();
-
   delay(550);
+  fx_csb(60);//舵机归正位
 }
 
 //右转弯
 void right()
 {
-  Serial.println("right");
-  fx_csb(100);//舵机归正位
-  fx_csb(40);//舵机转右40°
+
+  Serial.println("car right <<<<<" ) ;
+  Serial.println();
+  fx_csb(60);//舵机归正位
+  fx_csb(0);//舵机转右40°
   ESC_MGo();
   delay(550);
+  fx_csb(60);//舵机归正位
 }
 
 //左转弯掉头
 void Diaotou_left()
 {
-  fx_csb(100);//舵机归正位
+  Serial.println("car Diaotou_left <<<<<" ) ;
+  Serial.println();
+  fx_csb(60);//舵机归正位
   fx_csb(160);//舵机转左160°
   ESC_MGo();
-  Serial.println("diao-left");
   delay(1700);
+  fx_csb(60);//舵机归正位
 }
 
 
 //右转弯掉头
 void Diaotou_right()
 {
-  fx_csb(100);//舵机归正位
-  fx_csb(40);//舵机转右40°
-  Serial.println("diao-right");
+  Serial.println("car Diaotou_right <<<<<" ) ;
+  Serial.println();
+  fx_csb(60);//舵机归正位
+  fx_csb(0);//舵机转右40°
   delay(1700);
+  fx_csb(60);//舵机归正位
 }
 
 

@@ -131,13 +131,17 @@ void JL()
 //测定当前距离
 void CJ()
 {
+  csb_mid();//舵机归正位
   read_csb(TrigPin, EchoPin, 1);      //读前置超声波
 
-
+  csb_left();//舵机转左
   read_csb(TrigPin, EchoPin, 2);      //读左侧超声波
+  csb_mid();//舵机归正位
 
 
+  csb_right();//舵机转右
   read_csb(TrigPin, EchoPin, 3);      //读右侧超声波
+  csb_mid();//舵机归正位
   Cj_data();      //对数据排序
   JL();           //掐头去尾取平均，得到测距值
 }
@@ -145,9 +149,10 @@ void CJ()
 //距离判断之后的动作
 void JL_Panduan()
 {
-  Serial.println(CJ_data_a);      //串口输出测距值：可加 // 注释（不执行）
-  Serial.println(CJ_data_b);
-  Serial.println(CJ_data_c);
+  //串口输出测距值：可加 // 注释（不执行）
+  Serial.println("mid CJ : ");   Serial.println(CJ_data_a);
+  Serial.println("left CJ : ");  Serial.println(CJ_data_b);
+  Serial.println("right CJ : "); Serial.println(CJ_data_c);
 
   if (CJ_data_a < 25) //前方距离小于25cm
   {
@@ -160,7 +165,7 @@ void JL_Panduan()
     {
       //停止并左右判断，左转或右转
       ESC_MStop();
-      delay(200);
+      delay(2000);
       LR_panduan();
     }
     else
@@ -185,22 +190,21 @@ void LR_panduan()
 {
   float M1, M2, M3, M4;    //M1右侧距离；M2左侧距离
 
-  csb(40);      //舵机转右40°
+  // csb_right();//舵机转右
   CJ();         //测定当前距离
-  M1 = CJ_data_a; //40°右侧距离
-
-  csb(160);     //舵机转左160°
+  M1 = CJ_data_c; //40°右侧距离
+  //csb_left();//舵机转左
   CJ();
-  M2 = CJ_data_a; //160°左侧距离
+  M2 = CJ_data_b; //160°左侧距离
 
   M3 = CJ_data_b; //左侧超声波距离
   M4 = CJ_data_c; //右侧超声波距离
 
-  Serial.println(M1);
-  Serial.println(M2);
-  Serial.println(M3);
-  Serial.println(M4);
-  csb(100);     //舵机归正位
+  //可输出40°与16°角的测距值，现在已经注释掉了（不执行）
+  Serial.println("left CJ : ");  Serial.println(M2);  Serial.println(" : ");  Serial.println(M3);
+  Serial.println("right CJ : "); Serial.println(M1);  Serial.println(" : ");  Serial.println(M4);
+
+  //csb_mid();     //舵机归正位
 
   //  Serial.println(M1);       //可输出40°与16°角的测距值，现在已经注释掉了（不执行）
   //  Serial.println(M2);
@@ -215,10 +219,10 @@ void LR_panduan()
     if (gg_back >= 2)       //如果后退标志值等于2次，则加长后退运行时间
     {
       gg_back = 0;
-      delay(400);
+      delay(4000);
       LR_panduan();
     }
-    else    delay(50);
+    else delay(500);
   }
   else
   {
@@ -227,7 +231,7 @@ void LR_panduan()
       if ((M2 > 40) && (M3 < 60)) //40°前方＞40cm，同时左侧距离＜60cm，则转向偏左40°位置
       {
         Da_right();
-        delay(200);
+        delay(2000);
       }
       else if ((M2 < 40) && (M3 < 60)) //40°前方＜40cm，同时左侧距离＜60cm，则掉头左转
       {
@@ -247,7 +251,7 @@ void LR_panduan()
         if ((M1 > 40)  && (M4 < 60)) //160°前方＞40cm，同时右侧距离＜60cm，则转向偏右40°位置
         {
           Da_right();
-          delay(200);
+          delay(2000);
         }
         else
         {
@@ -262,8 +266,6 @@ void LR_panduan()
             gg_back = 0;
           }
         }
-
-
       }
     }
   }
@@ -281,14 +283,14 @@ void L_R()
     if ((CJ_data_b < 10)  && (CJ_data_c > 10)) //如果存在一侧的测距值小于10cm，则逐步调整小车进行转向
     {
       Da_left();
-      delay(10);
+      delay(100);
     }
     else
     {
       if ((CJ_data_b > 10)  &&  (CJ_data_c < 10))
       {
         Da_right();
-        delay(10);
+        delay(100);
       }
       else
       {
@@ -296,7 +298,6 @@ void L_R()
         {
           ESC_MGo();    //否则即为进入窄通道，需减速行驶
         }
-
       }
     }
   }
