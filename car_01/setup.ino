@@ -24,6 +24,9 @@ void setup()
   csb_setup();//初始化超声波测距舵机
 
   fx_csb_setup();//初始化转向舵机
+  
+  
+//  WFLY_setup();//初始遥控器控制参数
 
 
 }
